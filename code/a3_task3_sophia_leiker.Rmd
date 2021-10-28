@@ -53,26 +53,38 @@ ggplot(data = urchins, aes(x = size)) +
 Figure 1: Comparing distributions of sea urchin sizes between purple sea urchins and red sea urchins with size defined as sea urchin diameter measure in cm to the nearest 0.5
 
 ### Part 2: Descriptive Statistics Table
-Creating finalized summary table that contains the following:
-- mean
-- median
-- standard deviation
-- sample size 
+- Creating finalized summary table that contains the following:Mean, Median, Standard deviation, Sample size 
+- Rounding to only one decimal point because the measurements were taken were measured to the nearest 0.5
 ```{r}
 urchins_stats <- urchins %>% 
   group_by(common_name) %>% 
-  summarize(urchin_mean = mean(size),
-            urchin_median = median(size),
-            urchin_sd = sd(size),
+  summarize(urchin_mean = round(mean(size), 1),
+            urchin_median = round(median(size), 1),
+            urchin_sd = round(sd(size),1),
             urchin_sample_size = n())
 ```
 
+Updating Column Names in Urchin Stats
 ```{r}
-urchins_stats %>% 
-  kbl(caption = "Table 1: Sea Urchin Size Stats: Purple Urchins vs Red Urchins")
+urchins_stats <- rename(urchins_stats, "Common Name" = "common_name")
+urchins_stats <- rename(urchins_stats, "Urchin Size Mean (cm)" = "urchin_mean")
+urchins_stats <- rename(urchins_stats, "Urchin Size Median (cm)" = "urchin_median")
+urchins_stats <- rename(urchins_stats, "Urchin Size Standard Deviation (cm)" = "urchin_sd")
+urchins_stats <- rename(urchins_stats, "Sample Size" = "urchin_sample_size")
+
 ```
 
 
+```{r}
+urchins_stats %>% 
+  kbl(caption = "Table 1: Sea Urchin Size Stats: Purple Urchins vs Red Urchins") %>% 
+  kable_styling(full_width = F, html_font = "Cambria")
+```
+
+### Part 3: Overall takeaways 
+
+We can see that overall the mean urchin size for red urchins are larger than purple urchins. The actual difference between the means is 2.3cm. Their percentage difference is Their standard differences (the measure of spread/dispersion of the sample) differ in that the purple urchin spread is lower (SD of 1.2) than the spread of the red urchin data (SD of 1.9). The percentage diff I used absolute difference between two numbers/average of the two numbers X100. 3.2/((4.5+6.8)/2)*100 = 56.6%
+
+# Section 2: Exploring purple urchin counts by site and year
 
 
-### Overall takeaways 

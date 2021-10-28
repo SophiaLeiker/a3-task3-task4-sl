@@ -222,35 +222,45 @@ urchins &lt;- clean_names(urchins)</code></pre>
 </div>
 <div id="part-2-descriptive-statistics-table" class="section level3">
 <h3>Part 2: Descriptive Statistics Table</h3>
-<p>Creating finalized summary table that contains the following: - mean - median - standard deviation - sample size</p>
+<ul>
+<li>Creating finalized summary table that contains the following:Mean, Median, Standard deviation, Sample size</li>
+<li>Rounding to only one decimal point because the measurements were taken were measured to the nearest 0.5</li>
+</ul>
 <pre class="r"><code>urchins_stats &lt;- urchins %&gt;% 
   group_by(common_name) %&gt;% 
-  summarize(urchin_mean = mean(size),
-            urchin_median = median(size),
-            urchin_sd = sd(size),
+  summarize(urchin_mean = round(mean(size), 1),
+            urchin_median = round(median(size), 1),
+            urchin_sd = round(sd(size),1),
             urchin_sample_size = n())</code></pre>
+<p>Updating Column Names in Urchin Stats</p>
+<pre class="r"><code>urchins_stats &lt;- rename(urchins_stats, &quot;Common Name&quot; = &quot;common_name&quot;)
+urchins_stats &lt;- rename(urchins_stats, &quot;Urchin Size Mean (cm)&quot; = &quot;urchin_mean&quot;)
+urchins_stats &lt;- rename(urchins_stats, &quot;Urchin Size Median (cm)&quot; = &quot;urchin_median&quot;)
+urchins_stats &lt;- rename(urchins_stats, &quot;Urchin Size Standard Deviation (cm)&quot; = &quot;urchin_sd&quot;)
+urchins_stats &lt;- rename(urchins_stats, &quot;Sample Size&quot; = &quot;urchin_sample_size&quot;)</code></pre>
 <pre class="r"><code>urchins_stats %&gt;% 
-  kbl(caption = &quot;Table 1: Sea Urchin Size Stats: Purple Urchins vs Red Urchins&quot;)</code></pre>
-<table>
+  kbl(caption = &quot;Table 1: Sea Urchin Size Stats: Purple Urchins vs Red Urchins&quot;) %&gt;% 
+  kable_styling(full_width = F, html_font = &quot;Cambria&quot;)</code></pre>
+<table class="table" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 Table 1: Sea Urchin Size Stats: Purple Urchins vs Red Urchins
 </caption>
 <thead>
 <tr>
 <th style="text-align:left;">
-common_name
+Common Name
 </th>
 <th style="text-align:right;">
-urchin_mean
+Urchin Size Mean (cm)
 </th>
 <th style="text-align:right;">
-urchin_median
+Urchin Size Median (cm)
 </th>
 <th style="text-align:right;">
-urchin_sd
+Urchin Size Standard Deviation (cm)
 </th>
 <th style="text-align:right;">
-urchin_sample_size
+Sample Size
 </th>
 </tr>
 </thead>
@@ -260,13 +270,13 @@ urchin_sample_size
 Purple Urchin
 </td>
 <td style="text-align:right;">
-4.469797
+4.5
 </td>
 <td style="text-align:right;">
 4.5
 </td>
 <td style="text-align:right;">
-1.175264
+1.2
 </td>
 <td style="text-align:right;">
 31805
@@ -277,13 +287,13 @@ Purple Urchin
 Red Urchin
 </td>
 <td style="text-align:right;">
-6.776489
+6.8
 </td>
 <td style="text-align:right;">
 7.0
 </td>
 <td style="text-align:right;">
-1.891343
+1.9
 </td>
 <td style="text-align:right;">
 27408
@@ -292,9 +302,13 @@ Red Urchin
 </tbody>
 </table>
 </div>
-<div id="overall-takeaways" class="section level3">
-<h3>Overall takeaways</h3>
+<div id="part-3-overall-takeaways" class="section level3">
+<h3>Part 3: Overall takeaways</h3>
+<p>We can see that overall the mean urchin size for red urchins are larger than purple urchins. The actual difference between the means is 2.3cm. Their percentage difference is Their standard differences (the measure of spread/dispersion of the sample) differ in that the purple urchin spread is lower (SD of 1.2) than the spread of the red urchin data (SD of 1.9). The percentage diff I used absolute difference between two numbers/average of the two numbers X100. 3.2/((4.5+6.8)/2)*100 = 56.6%</p>
 </div>
+</div>
+<div id="section-2-exploring-purple-urchin-counts-by-site-and-year" class="section level1">
+<h1>Section 2: Exploring purple urchin counts by site and year</h1>
 </div>
 
 
