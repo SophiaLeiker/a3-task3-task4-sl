@@ -42,7 +42,7 @@ urchins <- clean_names(urchins)
 - Comparing distribution of sizes between purple and red urchins with a histogram
 - Reducing number of bins from ~30 to 10
 ```{r}
-ggplot(data = urchins, aes(x = size)) + 
+ggplot(data = urchins, aes(x = size, fill = common_name)) + 
   geom_histogram(bins = 10) + 
   facet_wrap(~common_name) + 
   labs(x = "Size of urchin diamereter (cm), measued to nearest 0.5", y = "Count of urchins", title = "Comparing distribution of sizes between purple and red urchins (LEIKER)" ) +
@@ -84,7 +84,12 @@ urchins_stats %>%
 
 ### Part 3: Overall takeaways 
 
-We can see that overall the mean urchin size for red urchins are larger than purple urchins. The actual difference between the means is 2.3cm. Their percentage difference is Their standard differences (the measure of spread/dispersion of the sample) differ in that the purple urchin spread is lower (SD of 1.2) than the spread of the red urchin data (SD of 1.9). The percentage diff I used absolute difference between two numbers/average of the two numbers X100. 3.2/((4.5+6.8)/2)*100 = 56.6%
+We can see that overall the mean urchin size for red urchins are larger than purple urchins. The actual difference between the means is 2.3cm. 
+
+Their percentage difference is 2.3/4.5 (for red) = .511, so the mean red is 51% smaller than the purple. Or on the flip side 2.3/6.8, so the mean purple is 34% larger than the mean read. 
+
+Their standard differences (the measure of spread/dispersion of the sample) differ in that the purple urchin spread is lower (SD of 1.2) than the spread of the red urchin data (SD of 1.9). 
+
 
 # Section 2: Exploring Purple Urchin Counts by Site and Year
 
@@ -112,7 +117,7 @@ purple_urchins <- urchins %>%
 
 ```{r}
 total_purple <- purple_urchins %>% 
-  group_by(site, year) %>% 
+  group_by(site_full, year) %>% 
   summarize(total = n()) #used summarize here so I could check and make sure the output makes sense
 
 #Checking output to make sure it makes sense
@@ -124,8 +129,12 @@ head(total_purple)
 - Making finalized graph of counts of purple urchins recorded at each site over time for years in the the study
 
 ```{r}
-#ggplot(data = total_purple, aes(x= year, y = total)) +
-         #geom_bar(aes(color = site))
+ggplot(data = total_purple, aes(x= year, y = total, fill = site_full)) +
+  geom_col() + 
+  facet_wrap(~ site_full) +
+  labs(x = "Urchin Count", y = "Year", title = "Count of Purple Urchins Recorded at Each Site Across Years") +
+  theme_minimal()
+  
 
 ```
 
