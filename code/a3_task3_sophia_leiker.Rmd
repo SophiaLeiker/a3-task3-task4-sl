@@ -1,0 +1,78 @@
+---
+title: 'Task 3: Santa Barbara Urchins'
+author: "Sophia Leiker"
+date: "10/28/2021"
+output: html_document
+---
+
+# Setup
+- Attaching packages
+- Setting code chunk options
+
+```{r setup, include=TRUE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE,warning = FALSE, message = FALSE)
+
+#Attaching packages
+library(here)
+library(tidyverse)
+library(janitor)
+library(kableExtra)
+```
+
+# Overview 
+In this data analysis, I am using data for red and purple urchins observed at 5 sites along the Santa Barbara coast to asses size comparisons, explore purple urchin counts by site and year, and make a finalized graph to visualize results. 
+
+Data Citation: Reed, D. 2020. SBC LTER: Reef: Long-term experiment: Kelp removal: Urchin size frequency distribution ver 20. Environmental Data Initiative. https://doi.org/10.6073/pasta/5a1e9ef03aa47bd2225c0bb98a02a63b. 
+
+
+# Section 1: Size Comparisons for Purple and Red Urchins 
+
+### Reading in the data
+- Reading in the urchins data set using here()
+- Cleaning up the column names to lower snake
+```{r}
+urchins <- read_csv(here("data", "urchins.csv"), show_col_types = FALSE)
+
+#Cleaning up the column names
+urchins <- clean_names(urchins)
+```
+
+### Part 1: Data Visualization
+- Comparing distribution of sizes between purple and red urchins with a histogram
+- Reducing number of bins from ~30 to 10
+```{r}
+ggplot(data = urchins, aes(x = size)) + 
+  geom_histogram(bins = 10) + 
+  facet_wrap(~common_name) + 
+  labs(x = "Size of urchin diamereter (cm), measued to nearest 0.5", y = "Count of urchins", title = "Comparing distribution of sizes between purple and red urchins (LEIKER)" ) +
+  theme_minimal()
+
+
+```
+
+Figure 1: Comparing distributions of sea urchin sizes between purple sea urchins and red sea urchins with size defined as sea urchin diameter measure in cm to the nearest 0.5
+
+### Part 2: Descriptive Statistics Table
+Creating finalized summary table that contains the following:
+- mean
+- median
+- standard deviation
+- sample size 
+```{r}
+urchins_stats <- urchins %>% 
+  group_by(common_name) %>% 
+  summarize(urchin_mean = mean(size),
+            urchin_median = median(size),
+            urchin_sd = sd(size),
+            urchin_sample_size = n())
+```
+
+```{r}
+urchins_stats %>% 
+  kbl(caption = "Table 1: Sea Urchin Size Stats: Purple Urchins vs Red Urchins")
+```
+
+
+
+
+### Overall takeaways 
