@@ -17,6 +17,7 @@ library(here)
 library(tidyverse)
 library(janitor)
 library(kableExtra)
+library(lubridate)
 ```
 
 # Overview 
@@ -85,6 +86,47 @@ urchins_stats %>%
 
 We can see that overall the mean urchin size for red urchins are larger than purple urchins. The actual difference between the means is 2.3cm. Their percentage difference is Their standard differences (the measure of spread/dispersion of the sample) differ in that the purple urchin spread is lower (SD of 1.2) than the spread of the red urchin data (SD of 1.9). The percentage diff I used absolute difference between two numbers/average of the two numbers X100. 3.2/((4.5+6.8)/2)*100 = 56.6%
 
-# Section 2: Exploring purple urchin counts by site and year
+# Section 2: Exploring Purple Urchin Counts by Site and Year
+
+### Part 1: Subset of Urchins data
+- Filtering only for purple urchins, converting date to class "Date", creating new column that only contains year, creating new column that has full name for each of the 5 sites
+
+```{r}
+purple_urchins <- urchins %>% 
+  filter(common_name == "Purple Urchin") %>% #checked using unique(purple_urchins$common_name) in console
+  mutate(date = mdy(date)) %>% #checking using class(purple_urchins$date)
+  mutate(year = year(date)) %>% 
+  mutate(site_full = case_when(
+    site == "NAPL" ~ "Naples Reef",
+    site == "AQUE" ~ "Arroyo Quemado Reef",
+    site == "CARP" ~ "Carpinteria Reef",
+    site == "MOHK" ~ "Mohawk Reef",
+    site == "IVEE" ~ "Isla Vista Reef"
+  ))
+```
+
+
+### Part 2: Creating a Table for Total Number of Purple Urchins
+- Table for total number of purple urchins observed by site and year
+- Doesn't need to appear in knitted doc
+
+```{r}
+total_purple <- purple_urchins %>% 
+  group_by(site, year) %>% 
+  summarize(total = n()) #used summarize here so I could check and make sure the output makes sense
+
+#Checking output to make sure it makes sense
+head(total_purple)
+
+```
+
+### Part 3: Graphing counts of Purple Urchins
+- Making finalized graph of counts of purple urchins recorded at each site over time for years in the the study
+
+```{r}
+#ggplot(data = total_purple, aes(x= year, y = total)) +
+         #geom_bar(aes(color = site))
+
+```
 
 

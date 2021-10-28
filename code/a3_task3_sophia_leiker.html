@@ -186,7 +186,8 @@ pre code {
 library(here)
 library(tidyverse)
 library(janitor)
-library(kableExtra)</code></pre>
+library(kableExtra)
+library(lubridate)</code></pre>
 </div>
 <div id="overview" class="section level1">
 <h1>Overview</h1>
@@ -308,7 +309,55 @@ Red Urchin
 </div>
 </div>
 <div id="section-2-exploring-purple-urchin-counts-by-site-and-year" class="section level1">
-<h1>Section 2: Exploring purple urchin counts by site and year</h1>
+<h1>Section 2: Exploring Purple Urchin Counts by Site and Year</h1>
+<div id="part-1-subset-of-urchins-data" class="section level3">
+<h3>Part 1: Subset of Urchins data</h3>
+<ul>
+<li>Filtering only for purple urchins, converting date to class “Date”, creating new column that only contains year, creating new column that has full name for each of the 5 sites</li>
+</ul>
+<pre class="r"><code>purple_urchins &lt;- urchins %&gt;% 
+  filter(common_name == &quot;Purple Urchin&quot;) %&gt;% #checked using unique(purple_urchins$common_name) in console
+  mutate(date = mdy(date)) %&gt;% #checking using class(purple_urchins$date)
+  mutate(year = year(date)) %&gt;% 
+  mutate(site_full = case_when(
+    site == &quot;NAPL&quot; ~ &quot;Naples Reef&quot;,
+    site == &quot;AQUE&quot; ~ &quot;Arroyo Quemado Reef&quot;,
+    site == &quot;CARP&quot; ~ &quot;Carpinteria Reef&quot;,
+    site == &quot;MOHK&quot; ~ &quot;Mohawk Reef&quot;,
+    site == &quot;IVEE&quot; ~ &quot;Isla Vista Reef&quot;
+  ))</code></pre>
+</div>
+<div id="part-2-creating-a-table-for-total-number-of-purple-urchins" class="section level3">
+<h3>Part 2: Creating a Table for Total Number of Purple Urchins</h3>
+<ul>
+<li>Table for total number of purple urchins observed by site and year</li>
+<li>Doesn’t need to appear in knitted doc</li>
+</ul>
+<pre class="r"><code>total_purple &lt;- purple_urchins %&gt;% 
+  group_by(site, year) %&gt;% 
+  summarize(total = n()) #used summarize here so I could check and make sure the output makes sense
+
+#Checking output to make sure it makes sense
+head(total_purple)</code></pre>
+<pre><code>## # A tibble: 6 × 3
+## # Groups:   site [1]
+##   site   year total
+##   &lt;chr&gt; &lt;dbl&gt; &lt;int&gt;
+## 1 AQUE   2008    67
+## 2 AQUE   2009   926
+## 3 AQUE   2010   921
+## 4 AQUE   2011   887
+## 5 AQUE   2012   764
+## 6 AQUE   2013   434</code></pre>
+</div>
+<div id="part-3-graphing-counts-of-purple-urchins" class="section level3">
+<h3>Part 3: Graphing counts of Purple Urchins</h3>
+<ul>
+<li>Making finalized graph of counts of purple urchins recorded at each site over time for years in the the study</li>
+</ul>
+<pre class="r"><code>#ggplot(data = total_purple, aes(x= year, y = total)) +
+         #geom_bar(aes(color = site))</code></pre>
+</div>
 </div>
 
 
