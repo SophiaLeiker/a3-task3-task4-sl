@@ -45,8 +45,9 @@ urchins <- clean_names(urchins)
 ggplot(data = urchins, aes(x = size, fill = common_name)) + 
   geom_histogram(bins = 10) + 
   facet_wrap(~common_name) + 
-  labs(x = "Size of urchin diamereter (cm), measued to nearest 0.5", y = "Count of urchins", title = "Comparing distribution of sizes between purple and red urchins (LEIKER)" ) +
-  theme_minimal()
+  labs(x = "Size of urchin diamereter (cm), measued to nearest 0.5", y = "Count of urchins", title = "Comparing distribution of sizes between purple and red urchins (LEIKER)", subtitle = "Data from Reed, D. 2020. SBC LTER: Reef: Long-term experiment") +
+  theme_minimal() +
+  guides(fill = guide_legend(title = "Urchin Common Name"))
 
 
 ```
@@ -132,10 +133,17 @@ head(total_purple)
 ggplot(data = total_purple, aes(x= year, y = total, fill = site_full)) +
   geom_col() + 
   facet_wrap(~ site_full) +
-  labs(x = "Urchin Count", y = "Year", title = "Count of Purple Urchins Recorded at Each Site Across Years") +
-  theme_minimal()
+  labs(x = "Urchin Count", y = "Year", title = "Count of Purple Urchins Recorded at Each Site Across Years", subtitle = "Data from Reed, D. 2020. SBC LTER: Reef: Long-term experiment") +
+  theme_minimal() +
+  guides(fill = guide_legend(title = "Study Sites"))
   
 
 ```
 
+Figure 2: Count of purple urchins recorded at each site across all the years included in the study
 
+### Part 4: Analysis
+
+In general, you can see a trend of purple urchin counts dropping from 2008 to 2020. One thing you would have to take into account is the influence of the control vs annual treatments. The alteration of the giant kelp could be a driver in the drop of purple urchin counts in that there is potential that the annual treatments could cause a decline in urchin counts. Another thing that you would have to take into account is that every time counts were taken, that the same exact area was assessed, at the same tidal time, and that they went out the same amount of times. A drop in urchin counts could reflect simply that their data collection practices were not consistent. Climate could also effect urchin counts as it is always an influence on population dynamics. 
+
+# END TASK 3
