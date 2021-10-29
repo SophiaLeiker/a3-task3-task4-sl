@@ -1,0 +1,96 @@
+---
+title: 'Task 4: Naples Reef Purple Urchins'
+author: "Sophia Leiker"
+date: "10/29/2021"
+output: html_document
+---
+
+# Setup
+- Attaching packages
+- Setting code chunk options
+
+```{r setup, include=TRUE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE,warning = FALSE, message = FALSE)
+
+#Attaching packages
+library(here)
+library(tidyverse)
+library(janitor)
+library(kableExtra)
+library(lubridate)
+```
+
+# Overview 
+In this data analysis, I am using data for purple urchins observed at 5 sites along the Santa Barbara coast to assess mean size comparisons in relation to a control group where there was no giant kelp removal versus an annual treatment where there was annual kelp removal. This analysis focuses on the Naples Reef in 2010.
+
+We are using historgrams and quantile-quantile plots to first visually inspect if the distribution looks normal, and then using QQ plots to assess the normal distribution. If the data is normally distributed, the then when plotting quantiles vs theoretical normal quantiles, there should be a linear looking relationship.
+
+*Data Citation: Reed, D. 2020. SBC LTER: Reef: Long-term experiment: Kelp removal: Urchin size frequency distribution ver 20. Environmental Data Initiative. https://doi.org/10.6073/pasta/5a1e9ef03aa47bd2225c0bb98a02a63b.*
+
+
+# Section 1: Purple Urchins at Naples Reef in 2010
+
+### Reading in the data
+- Reading in the urchins data set using here()
+- Cleaning up the column names to lower snake
+```{r}
+urchins <- read_csv(here("data", "urchins.csv"), show_col_types = FALSE)
+
+#Cleaning up the column names
+urchins <- clean_names(urchins)
+```
+
+### Filtering to only include data from:
+- Purple Urchins
+- Naples Reef
+- Year 2010
+
+
+```{r}
+naples_urchins <- urchins %>% 
+  filter(common_name == "Purple Urchin", site == "NAPL") %>% #checked using unique(naples_urchins$common_name)
+  mutate(date = mdy(date)) %>% #checking using class(purple_urchins$date)
+  mutate(year = year(date)) %>% 
+  filter(year == 2010)
+```
+
+# Section 2: Exploratory Histograms & QQ Plots: Urchin Sizes
+- Exploring Histogram Distributions of sea urchin size
+- Exploring QQ Plots of sea urchin size
+
+### 2.1 Histograms
+Testing out histograms with different bid widths to assess normality of urchin sizes at the control plots vs the annual plots. These histograms are plotting frequency of observations within the bins
+```{r}
+ggplot(data = naples_urchins, aes(x= size)) +
+  geom_histogram() +
+  facet_wrap(~ treatment) +
+  labs(title = "Histogram Plot using default bin width", x = "Size (cm)")
+
+
+ggplot(data = naples_urchins, aes(x= size)) +
+  geom_histogram(bins = 20, binwidth = .25) +
+  facet_wrap(~ treatment) +
+  labs(title = "Histogram using .25 bin width", x="Size (cm)")
+
+ggplot(data = naples_urchins, aes(x= size)) +
+  geom_histogram(bins = 20, binwidth = .5) +
+  facet_wrap(~ treatment) +
+  labs(title = "Histogram Plot using .5 bin width", x= "Size (cm)")
+```
+
+#### Histogram analysis
+In the histograms, one can observe that the annual treatment data seems somewhat more skewed to the left, that is, there more frequent observations in the lower ranges of the urchin size. In the control histogram, the distribution looks more normal with the highest frequency of observations mostly around the center of the distribution. Additionally, the mean of annual observations seems to be lower (around 3cm) and the control mean seems to be slightly higher at around 4cm. 
+
+
+### 2.2 Quantile Quantile Plots
+- Testing out QQ plots to assess normality of urchin sizes at the control plots vs the annual plots.
+- QQ plots are plotting quarantines of data sets vs quarantines of another
+- If the data is normally distributed, then we plot the quarantines vs theoretical normal quantiles, we'd find a linear relationship
+```{r}
+ggplot(data = naples_urchins, aes(sample = size)) +
+  geom_qq() +
+  facet_wrap(~treatment)
+```
+
+
+

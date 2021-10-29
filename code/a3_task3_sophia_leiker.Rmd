@@ -132,8 +132,8 @@ head(total_purple)
 ```{r}
 ggplot(data = total_purple, aes(x= year, y = total, fill = site_full)) +
   geom_col() + 
-  facet_wrap(~ site_full) +
-  labs(x = "Urchin Count", y = "Year", title = "Count of Purple Urchins Recorded at Each Site Across Years", subtitle = "Data from Reed, D. 2020. SBC LTER: Reef: Long-term experiment") +
+  facet_wrap(~ site_full, scales = "free") +
+  labs(x = "Year", y = "Urchin Count", title = "Count of Purple Urchins Recorded at Each Site Across Years", subtitle = "Data from Reed, D. 2020. SBC LTER: Reef: Long-term experiment") +
   theme_minimal() +
   guides(fill = guide_legend(title = "Study Sites"))
   
