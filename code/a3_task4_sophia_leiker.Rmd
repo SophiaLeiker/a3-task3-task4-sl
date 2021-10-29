@@ -27,10 +27,11 @@ We are using historgrams and quantile-quantile plots to first visually inspect i
 
 *Data Citation: Reed, D. 2020. SBC LTER: Reef: Long-term experiment: Kelp removal: Urchin size frequency distribution ver 20. Environmental Data Initiative. https://doi.org/10.6073/pasta/5a1e9ef03aa47bd2225c0bb98a02a63b.*
 
+***
 
 # Section 1: Purple Urchins at Naples Reef in 2010
 
-### Reading in the data
+### 1.1 Reading in the data
 - Reading in the urchins data set using here()
 - Cleaning up the column names to lower snake
 ```{r}
@@ -40,7 +41,7 @@ urchins <- read_csv(here("data", "urchins.csv"), show_col_types = FALSE)
 urchins <- clean_names(urchins)
 ```
 
-### Filtering to only include data from:
+### 1.2 Filtering to only include data from:
 - Purple Urchins
 - Naples Reef
 - Year 2010
@@ -53,6 +54,8 @@ naples_urchins <- urchins %>%
   mutate(year = year(date)) %>% 
   filter(year == 2010)
 ```
+
+***
 
 # Section 2: Exploratory Histograms & QQ Plots: Urchin Sizes
 - Exploring Histogram Distributions of sea urchin size
@@ -79,7 +82,7 @@ ggplot(data = naples_urchins, aes(x= size)) +
 ```
 
 #### Histogram analysis
-In the histograms, one can observe that the annual treatment data seems somewhat more skewed to the left, that is, there more frequent observations in the lower ranges of the urchin size. In the control histogram, the distribution looks more normal with the highest frequency of observations mostly around the center of the distribution. Additionally, the mean of annual observations seems to be lower (around 3cm) and the control mean seems to be slightly higher at around 4cm. 
+In the histograms, one can observe that the annual treatment data seems somewhat more skewed to the left, that is, there more frequent observations in the lower ranges of the urchin size. In the control histogram, the distribution looks more normal with the highest frequency of observations mostly around the center of the distribution. Additionally, the mean of annual observations seems to be lower (around 3cm) and the control mean seems to be slightly higher at around 4cm. This could mean that the annual treatments are actuall causing urchins to be slightly smaller than the control group but more information and variables would need to be provided.
 
 
 ### 2.2 Quantile Quantile Plots
@@ -92,5 +95,46 @@ ggplot(data = naples_urchins, aes(sample = size)) +
   facet_wrap(~treatment)
 ```
 
+#### QQ Plot analysis
 
+The QQ plot of the control seems slightly more linear based on visual inspection as it seems to have less outliers on the high and low ends of the data compared to the annual treatment. In the annual treatment QQ plot, one can see that there seems to be more data spread around the lower end of the relationship, which would be expected based on the skew of the histogram. Based on these results I would support my intuition that the control plots look as if it they following more of a normal distribution of urchin sizes in comparison to the annual treatment plots.
 
+***
+
+# Section 3: Summary Table
+- Creating summary table for both groups with the following:
+- Mean
+- Standard Deviation
+- Sample Size
+
+### 3.1 Grouping by Treatment and Then Summarizing by Sample Statistics
+```{r}
+naples_stats <- naples_urchins %>% 
+  group_by(treatment) %>% 
+  summarize(urchin_mean = round(mean(size), 1),
+            urchin_median = round(median(size), 1),
+            urchin_sd = round(sd(size),1),
+            urchin_sample_size = n())
+```
+
+### 3.2 Updating Column Names in Naples Stats
+```{r}
+naples_stats <- rename(naples_stats, "Treatment" = "treatment")
+naples_stats <- rename(naples_stats, "Urchin Size Mean (cm)" = "urchin_mean")
+naples_stats <- rename(naples_stats, "Urchin Size Median (cm)" = "urchin_median")
+naples_stats <- rename(naples_stats, "Urchin Size Standard Deviation (cm)" = "urchin_sd")
+naples_stats <- rename(naples_stats, "Sample Size" = "urchin_sample_size")
+
+```
+
+### 3.3 Creating Summary Table
+
+```{r}
+naples_stats %>% 
+  kbl(caption = "Table 1: Sea Urchin Size Stats: Control vs Annual Treatment") %>% 
+  kable_styling(full_width = F, html_font = "Cambria")
+```
+
+***
+
+# END TASK 4
