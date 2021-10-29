@@ -87,12 +87,13 @@ In the histograms, one can observe that the annual treatment data seems somewhat
 
 ### 2.2 Quantile Quantile Plots
 - Testing out QQ plots to assess normality of urchin sizes at the control plots vs the annual plots.
-- QQ plots are plotting quarantines of data sets vs quarantines of another
+- QQ plots are plotting quantiles of data sets vs quantiles of another
 - If the data is normally distributed, then we plot the quarantines vs theoretical normal quantiles, we'd find a linear relationship
 ```{r}
 ggplot(data = naples_urchins, aes(sample = size)) +
   geom_qq() +
-  facet_wrap(~treatment)
+  facet_wrap(~treatment) +
+  labs(title = "QQ Plots for Annual vs Control Urchin Treatments")
 ```
 
 #### QQ Plot analysis
